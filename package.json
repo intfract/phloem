@@ -1,0 +1,26 @@
+{
+  "name": "phloem",
+  "description": "Phloem is the best font-end framework written in TypeScript!",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@types/web": "^0.0.140",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.2.5",
+    "vite": "^5.1.4"
+  },
+  "scripts": {
+    "prettier": "prettier 'src/**/*.ts' --write",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ]
+}
