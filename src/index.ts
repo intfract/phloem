@@ -67,39 +67,42 @@ export function addChild(parent: HTMLElement, slot: Slot | SlotArray | string | 
   return null
 }
 
-export function tag(tagName: string, slot: SlotArray, attributes?: Record<string, string>): HTMLElement {
-  const element = document.createElement(tagName)
-  addChild(element, slot)
+function addAttributes(element: HTMLElement, attributes?: Record<string, string | Reactive<string>>) {
   if (attributes) {
-    Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
+    Object.keys(attributes).forEach(key => {
+      const value = attributes[key]
+      if (value instanceof Reactive) {
+        element.setAttribute(key, value.value)
+        value.subscribe(newValue => element.setAttribute(key, newValue))
+      } else {
+        element.setAttribute(key, value)
+      }
+    })
   }
   return element
 }
 
-export function h(level: 1 | 2 | 3 | 4 | 5 | 6, slot: SlotArray, attributes?: Record<string, string>) {
+export function tag(tagName: string, slot: SlotArray, attributes?: Record<string, string | Reactive<string>>): HTMLElement {
+  const element = document.createElement(tagName)
+  addChild(element, slot)
+  addAttributes(element, attributes)
+  return element
+}
+
+export function h(level: 1 | 2 | 3 | 4 | 5 | 6, slot: SlotArray, attributes?: Record<string, string | Reactive<string>>) {
   return tag(`h${level}`, slot, attributes)
 }
 
-export function button(slot: SlotArray, attributes?: Record<string, string>, onClick?: EventListenerOrEventListenerObject) {
+export function button(slot: SlotArray, attributes?: Record<string, string | Reactive<string>>, onClick?: EventListenerOrEventListenerObject) {
   const btn = tag('button', slot, attributes)
   if (onClick) btn.addEventListener('click', onClick)
   return btn
 }
 
-export function img(attributes?: Record<string, string>): HTMLImageElement {
-  const element = document.createElement('img')
-  if (attributes) {
-    Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
-  }
-  return element
-}
-
-export function input(type: string, attributes?: Record<string, string>, bind?: Reactive<string | number | boolean>): HTMLInputElement {
+export function input(type: string, attributes?: Record<string, string | Reactive<string>>, bind?: Reactive<string | number | boolean>): HTMLInputElement {
   const element = document.createElement('input')
   element.setAttribute('type', type)
-  if (attributes) {
-    Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
-  }
+  addAttributes(element, attributes)
   if (bind) {
     if (!(bind instanceof Reactive)) {
       console.error(`[ATSML] input bind must be of type Reactive<string | number>`)
@@ -118,7 +121,7 @@ export function input(type: string, attributes?: Record<string, string>, bind?: 
   return element
 }
 
-export function style(declarations: Record<string, string>): string {
+export function style(declarations: Record<string, string | Reactive<string>>): string {
   let s: string = ''
   for (const [key, value] of Object.entries(declarations)) {
     s += `${key}: ${value};`

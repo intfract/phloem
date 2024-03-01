@@ -1,7 +1,6 @@
 import { Reactive, addChild, button, input, tag } from '../dist/index'
 
-let textBind = new Reactive('Hello, world!')
-let counter = new Reactive(0)
+let title = new Reactive('This is a tooltip!')
 
 addChild(
   document.body,
@@ -9,18 +8,18 @@ addChild(
     tag(
       'p',
       [
-        textBind,
+        'This is testing reactive attributes!',
       ],
-    ),
-    input(
-      'text', // input type
-      {}, // attributes
-      textBind, // value binding
+      {
+        'title': title,
+      },
     ),
     button(
-      ['counter: ', counter],
+      [
+        'Change Tooltip',
+      ],
       {},
-      e => counter.value++
+      e => title.value = 'The tooltip changed!',
     )
   ],
 )
