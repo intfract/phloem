@@ -1,6 +1,7 @@
-import { Reactive, addChild, button, input, tag } from '../dist/index'
+import './styles.css'
+import { Reactive, addChild, button, input, tag } from '../src/index'
 
-let title = new Reactive('This is a tooltip!')
+let classList = new Reactive<Array<string>>(['hidden'])
 
 addChild(
   document.body,
@@ -11,15 +12,15 @@ addChild(
         'This is testing reactive attributes!',
       ],
       {
-        'title': title,
+        'class': classList,
       },
     ),
     button(
       [
-        'Change Tooltip',
+        'Reveal Text',
       ],
       {},
-      e => title.value = 'The tooltip changed!',
+      e => classList.value = [],
     )
   ],
 )
