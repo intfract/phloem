@@ -1,7 +1,7 @@
 {
   "name": "phloem",
   "description": "Phloem is the best font-end framework written in TypeScript!",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "main": "dist/index.js",
   "devDependencies": {

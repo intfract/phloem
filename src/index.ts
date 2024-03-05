@@ -9,6 +9,14 @@ export class Reactive<T> {
   subscribers: Subscriber<T>[] = []
   constructor(value: T) {
     this._value = value
+    if (value instanceof Array) {
+      value.forEach((x, i) => {
+        if (x instanceof Reactive) {
+          x.subscribe(newValue => value[i] = newValue)
+          value[i] = x.value
+        }
+      })
+    }
   }
 
   subscribe(subscriber: Subscriber<T>): this {
@@ -78,7 +86,7 @@ function addAttributes(element: HTMLElement, attributes?: Record<string, string 
       if (value instanceof Reactive) {
         const v = value.value
         element.setAttribute(key, v instanceof Array ? v.join(' ') : v)
-        value.subscribe(v => element.setAttribute(key, v instanceof Array ? v.join(' ') : v))
+        value.subscribe((v: string | string[]) => element.setAttribute(key, v instanceof Array ? v.join(' ') : v))
       } else {
         const v = value
         element.setAttribute(key, v instanceof Array ? v.join(' ') : v)

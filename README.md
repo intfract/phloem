@@ -24,13 +24,12 @@ Subscriber functions get triggered whenever `Reactive<T>.value` gets set. Howeve
 
 > [!TIP]
 > Use the `Reactive<T>.broadcast` method to update subscribers manually
-
-```ts
-import { Reactive } from 'phloem'
-let classList = new Reactive([])
-classList.value.push('dark') // does not trigger setter
-classList.broadcast() // manually update subscribers
-```
+> ```ts
+> import { Reactive } from 'phloem'
+> let classList = new Reactive([])
+> classList.value.push('dark') // push method does not trigger setter
+> classList.broadcast() // manually update subscribers
+> ```
 
 ## Examples
 
@@ -91,6 +90,7 @@ addChild(
 
 ```ts
 import { Reactive, addChild, button, tag } from 'phloem'
+
 let classList = new Reactive<Array<string>>(['hidden'])
 
 addChild(
@@ -110,7 +110,7 @@ addChild(
         'Reveal Text',
       ],
       {},
-      e => classList.value = [],
+      e => classList.value = [], // use assignment over mutation
     )
   ],
 )
